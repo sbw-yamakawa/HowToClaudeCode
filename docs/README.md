@@ -14,6 +14,9 @@ Claude Codeは、ターミナルで動作するAIコーディングアシスタ�
 4. [02-intermediate.md](./02-intermediate.md) — 効果的なプロンプト・設定
 5. [03-advanced.md](./03-advanced.md) — 応用機能（MCP・エージェント・フック）
 
+**設定をまるごとインポートしたい方:**
+6. [05-dotfiles.md](./05-dotfiles.md) — dotfiles で Claude Code をカスタマイズする
+
 ## ファイル一覧
 
 | ファイル | 内容 | 対象 |
@@ -23,6 +26,7 @@ Claude Codeは、ターミナルで動作するAIコーディングアシスタ�
 | [02-intermediate.md](./02-intermediate.md) | 効果的な使い方・設定 | 基本操作に慣れた方 |
 | [03-advanced.md](./03-advanced.md) | MCP・エージェント・フック | 応用機能を使いたい方 |
 | [04-use-cases.md](./04-use-cases.md) | 開発者向けユースケース集 | 実例を参考にしたい方 |
+| [05-dotfiles.md](./05-dotfiles.md) | dotfiles によるカスタマイズ | 設定をまとめてインポートしたい方 |
 
 ## Claude Codeでできること（ひとこと）
 
