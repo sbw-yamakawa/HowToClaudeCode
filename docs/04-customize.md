@@ -216,9 +216,18 @@ Claude Code がツールを実行する前後に、自動でコマンドを走�
 
 `matcher` に正規表現を書くことで、特定のツールにだけフックを適用できる。
 
+- `"Write|Edit"`: ファイル書き込み・編集時のみ
+- `"Bash"`: Bash コマンド実行時のみ
+
+例:
+
 ```json
-"matcher": "Write|Edit"   // ファイル書き込み・編集時のみ
-"matcher": "Bash"         // Bash コマンド実行時のみ
+{
+  "matcher": "Write|Edit",
+  "hooks": [
+    { "type": "command", "command": "npm run lint -- --fix" }
+  ]
+}
 ```
 
 **コマンド実行前にログを記録する例**
@@ -241,6 +250,8 @@ Claude Code がツールを実行する前後に、自動でコマンドを走�
 ---
 
 ## dotfiles — チームで設定を共有する
+
+dotfiles とは、設定ファイルをまとめて管理するための Git リポジトリ。Claude Code の設定（rules/・agents/・skills/・settings.json）を dotfiles に入れることで、チームで同じ設定を共有できる。
 
 ### Claudeにsetup.shを書かせる
 
