@@ -4,18 +4,19 @@
 
 ## どこから読むか
 
-初めての人:
-- [00-getting-started.md](./00-getting-started.md) — インストールと初回起動
-- [01-basics.md](./01-basics.md) — 基本操作
-- [04-use-cases.md](./04-use-cases.md) — 実際の使い方例
+**やりたいことから選ぶ:**
 
-もっと使いこなしたい人:
-- [02-intermediate.md](./02-intermediate.md) — プロンプトの書き方・設定
-- [03-advanced.md](./03-advanced.md) — MCP・エージェント・フック
-- [06-extensions.md](./06-extensions.md) — 拡張機能の探し方・追加方法（MCP・スキル・エージェント・プラグイン）
+| やりたいこと | ドキュメント |
+|------------|------------|
+| まずインストールして使い始めたい | [01-getting-started.md](./01-getting-started.md) |
+| 毎日の作業に使えるプロンプトが知りたい | [02-daily-use.md](./02-daily-use.md) |
+| もっと正確に動かしたい（プロンプト術） | [03-better-prompts.md](./03-better-prompts.md) |
+| CLAUDE.md・設定ファイルを整えたい | [04-customize.md](./04-customize.md) |
+| MCP・エージェント・スキルを追加したい | [05-extend.md](./05-extend.md) |
 
-設定をまるごとインポートしたい人:
-- [05-dotfiles.md](./05-dotfiles.md) — dotfiles でカスタマイズ
+**順番に読む場合:**
+
+01 → 02 → 03 → 04 → 05
 
 ## こんなことができる
 
