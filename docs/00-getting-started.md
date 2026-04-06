@@ -1,107 +1,83 @@
-# 00. はじめに — インストールと初回起動
-
-このファイルで学べること:
-- Claude Codeのインストール
-- APIキーの設定
-- 初回起動の確認
-
----
-
-## 前提条件
-
-以下がインストールされていることを確認してください。
-
-```bash
-node --version   # v18以上が必要
-npm --version    # npmが使えること
-```
-
-Node.jsが入っていない場合は https://nodejs.org/ からインストールしてください。
-
----
+# はじめに — インストールと初回起動
 
 ## インストール
 
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-インストール確認:
+**Linux (Mac/WSL):**
 
 ```bash
-claude --version
-```
-
-バージョン番号が表示されれば成功です。
-
----
-
-## APIキーの設定
-
-Claude Codeの利用にはAnthropicのAPIキーが必要です。
-
-### APIキーの取得
-
-1. https://console.anthropic.com/ にアクセス
-2. アカウント作成またはログイン
-3. 「API Keys」→「Create Key」でキーを発行
-
-### 環境変数に設定
-
-**Mac / Linux:**
-
-```bash
-export ANTHROPIC_API_KEY="sk-ant-..."
-```
-
-毎回設定するのが面倒な場合は `~/.zshrc` または `~/.bashrc` に追記してください:
-
-```bash
-echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.zshrc
-source ~/.zshrc
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 **Windows (PowerShell):**
 
-```powershell
-$env:ANTHROPIC_API_KEY = "sk-ant-..."
-```
-
-永続化する場合:
+Windowsでは事前に [Git for Windows](https://git-scm.com/downloads/win) のインストールが必要。
 
 ```powershell
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-...", "User")
+irm https://claude.ai/install.ps1 | iex
 ```
 
----
+## PATHの設定
 
-## 初回起動
+インストールスクリプトは `claude` バイナリを以下の場所に配置する。
 
-プロジェクトのディレクトリに移動して起動します:
+| OS | インストール先 |
+|----|--------------|
+| Linux | `~/.local/bin/` |
+| Windows | `%USERPROFILE%\.local\bin\` |
+
+インストール後にこのディレクトリをPATHに追加する必要がある。
+
+**Linux (Mac/WSL):**
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+zshを使っている場合:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+設定後に `claude --version` が動作すれば成功。
+
+**Windows (PowerShell):**
+
+```powershell
+$claudePath = "$env:USERPROFILE\.local\bin"
+[System.Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";$claudePath", "User")
+```
+
+設定後は新しいターミナルを開いて `claude --version` が動作すれば成功。
+
+## 起動してみる
 
 ```bash
 cd your-project
 claude
 ```
 
-初回起動時はセットアップの確認画面が表示されます。指示に従って進めてください。
+### 初回起動時の認証フロー（Proプラン）
 
-起動すると `>` プロンプトが表示されます。日本語で話しかけてみましょう:
+1. `claude` を実行するとテーマ選択画面が表示される。好みのスタイルを選択する
+2. ログイン方法の選択画面が表示される。`1. Claude account with subscription` を選択する
+3. ターミナルにログイン用URLが表示される（ブラウザが自動で開かない場合は `c` キーでURLをコピーしてブラウザで開く）
+4. ブラウザにAuthentication Codeが表示される。コードをコピーする
+5. ターミナルの `Paste code here if prompted >` にコードを貼り付けて Enter
+6. 認証完了後、`>` プロンプトが表示される
+
+`>` プロンプトが出たら成功。日本語で話しかけてみる:
 
 ```
 > このプロジェクトの構成を説明してください
 ```
 
----
+ログアウトするには `/logout` と入力する。
 
 ## うまくいかない場合
 
-**「command not found: claude」と表示される**
-→ `npm install -g @anthropic-ai/claude-code` を再実行してください。Pathが通っていない場合は `npx @anthropic-ai/claude-code` でも起動できます。
+**「command not found: claude」** → インストールコマンドを再実行する。
 
-**「Invalid API Key」エラー**
-→ `ANTHROPIC_API_KEY` が正しく設定されているか確認してください: `echo $ANTHROPIC_API_KEY`
-
----
-
-次のステップ: [01-basics.md](./01-basics.md) — 基本操作を学ぶ
+**「Invalid API Key」** → `echo $ANTHROPIC_API_KEY` でキーが設定されているか確認。
