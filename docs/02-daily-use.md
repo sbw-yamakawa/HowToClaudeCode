@@ -312,6 +312,119 @@ claude --resume <名前>     # 名前を指定して再開
 
 ---
 
+## git worktree — 複数ブランチを同時に作業する
+
+### Claudeに頼む（推奨）
+
+feature ブランチで作業中に緊急対応が入った場合:
+
+```
+> feature/payment ブランチで作業中ですが、main に緊急バグが見つかりました。
+> git worktree を使って、今の作業を壊さずに hotfix ブランチを別のフォルダで作業したいです。
+```
+
+Claude がワークツリーの作成から作業ディレクトリの案内まで行ってくれる。
+
+### 仕組み
+
+通常の git はブランチを切り替えると作業ディレクトリが変わる。worktree を使うと、**複数のブランチを別々のディレクトリで同時にチェックアウト**できる。
+
+```
+プロジェクト/
+├── my-project/          # メイン (feature/payment)
+│   └── ...
+└── my-project-hotfix/   # worktree (hotfix/login-bug)
+    └── ...
+```
+
+2つのターミナルウィンドウを開いて、それぞれで独立して作業できる。
+
+### 基本コマンド集
+
+```bash
+# worktree を追加（新しいブランチを作りながら）
+git worktree add ../my-project-hotfix -b hotfix/login-bug
+
+# worktree を追加（既存ブランチを使う）
+git worktree add ../my-project-hotfix hotfix/login-bug
+
+# 現在の worktree 一覧を確認
+git worktree list
+
+# worktree を削除
+git worktree remove ../my-project-hotfix
+
+# 削除済みワークツリーの参照を掃除
+git worktree prune
+```
+
+### よくある使い方パターン
+
+**ホットフィックス対応**
+
+feature ブランチで作業中に緊急バグの対応が必要になったとき:
+
+```bash
+# main から hotfix ブランチを作成して別フォルダでチェックアウト
+git worktree add ../my-project-hotfix -b hotfix/login-bug main
+cd ../my-project-hotfix
+# → 緊急バグを修正してコミット・マージ
+cd ../my-project
+git worktree remove ../my-project-hotfix
+```
+
+**PRレビュー確認**
+
+レビュー対象ブランチをビルドして動作確認したいとき:
+
+```bash
+# レビュー用に別ディレクトリでチェックアウト
+git worktree add ../my-project-review feature/other-team-pr
+cd ../my-project-review
+# → ビルド・動作確認
+cd ../my-project
+git worktree remove ../my-project-review
+```
+
+**長期ブランチの並行維持**
+
+develop と main を常に参照したいとき:
+
+```bash
+# main を常に別ディレクトリで開いておく
+git worktree add ../my-project-main main
+# → リリースチェックや差分確認に使う
+```
+
+### 注意点
+
+**同一ファイルを2か所で同時に編集しない**
+
+worktree は同じ Git オブジェクトを共有している。両方の worktree で同じファイルを変更すると、コンフリクトが発生しやすい。編集するファイルをディレクトリ単位で分けて作業する。
+
+**node_modules / .env は共有されない**
+
+worktree 内では `npm install` を再実行する必要がある。`.env` もメインからコピーが必要。
+
+**同じブランチを2つの worktree でチェックアウトできない**
+
+同一ブランチは1つの worktree にしか割り当てられない。別のブランチを派生させて使う。
+
+### クリーンアップ
+
+```bash
+# worktree のディレクトリを削除してから登録も解除
+git worktree remove ../my-project-hotfix
+
+# ディレクトリが手動削除済みの場合は prune で参照を掃除
+git worktree prune
+
+# 全 worktree の確認
+git worktree list
+```
+
+---
+
 ## 次のステップ
 
 - [03-better-prompts.md](./03-better-prompts.md) — より正確に動かしたいとき
