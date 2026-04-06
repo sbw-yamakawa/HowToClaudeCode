@@ -1,3 +1,4 @@
 .superpowers/
+.claude/
 .env
 node_modules/
