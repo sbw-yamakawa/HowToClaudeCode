@@ -369,9 +369,14 @@ feature ブランチで作業中に緊急バグの対応が必要になったと
 # main から hotfix ブランチを作成して別フォルダでチェックアウト
 git worktree add ../my-project-hotfix -b hotfix/login-bug main
 cd ../my-project-hotfix
-# → 緊急バグを修正してコミット・マージ
+# → 緊急バグを修正してコミット
+git commit -m "fix: ログインバグを修正"
+
+# メインの作業ツリーに戻ってマージ
 cd ../my-project
+git merge hotfix/login-bug        # ここでマージされる
 git worktree remove ../my-project-hotfix
+git branch -d hotfix/login-bug    # ブランチを削除
 ```
 
 **PRレビュー確認**
