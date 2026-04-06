@@ -55,7 +55,8 @@ $claudePath = "$env:USERPROFILE\.local\bin"
 ## 起動してみる
 
 ```bash
-cd your-project
+# 作業したいプロジェクトのディレクトリに移動してから起動する
+cd ~/path/to/your-project
 claude
 ```
 
