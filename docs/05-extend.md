@@ -382,6 +382,109 @@ Claudeは複雑なタスクと判断すると、`agents/` フォルダの定義�
 
 ---
 
+## git worktree — エージェントに隔離環境を与える
+
+### Claudeに頼む（推奨）
+
+```
+> 実装計画を実行する際、メインブランチに影響を与えたくありません。
+> 各サブエージェントを独立した git worktree で動かしてください。
+```
+
+Claude がワークツリーの作成・割り当て・後片付けまで行ってくれる。
+
+### 仕組み
+
+サブエージェントを worktree 内で動かすと、**メインの作業ブランチを汚さずに実験的な実装**ができる。エージェントが変更を加えても、worktree を削除すれば元に戻せる。
+
+```
+メインClaude（master ブランチ）
+  ├── サブエージェントA → worktree-a/ (feature/auth)
+  ├── サブエージェントB → worktree-b/ (feature/payment)
+  └── サブエージェントC → worktree-c/ (feature/notification)
+```
+
+各エージェントが独立したブランチ＋ディレクトリで作業するため、互いのファイル変更が衝突しない。
+
+### ユースケース
+
+**実装計画の並列実行**
+
+独立したタスクを複数のエージェントで同時に進める:
+
+```
+> 以下を worktree を使って並列で実行してください:
+> 1. src/auth/ のユニットテストを追加する
+> 2. src/api/ の JSDoc コメントを補完する
+> 3. 未使用の import を全ファイルから削除する
+> 各タスクは独立した worktree で行ってください。
+```
+
+**破壊的変更の試験的実施**
+
+```
+> 依存ライブラリを v2 → v3 に更新したい。
+> まず worktree を作って試してみてください。
+> 問題なければ main にマージ、問題あれば worktree を削除してください。
+```
+
+**E2Eテスト用の隔離環境**
+
+```
+> E2Eテストを別の worktree で実行してください。
+> テスト中にファイルが変更されても、メインの作業に影響しないようにしたいです。
+```
+
+### worktree エージェントのライフサイクル
+
+```
+1. worktree 作成
+   git worktree add ../feature-worktree -b feature/xxx
+         ↓
+2. エージェントが worktree 内で作業
+   （ファイル変更・コミット）
+         ↓
+3a. 成功 → メインブランチにマージ
+    git merge feature/xxx
+    git worktree remove ../feature-worktree
+         ↓
+3b. 失敗 → worktree ごと破棄
+    git worktree remove --force ../feature-worktree
+    git branch -D feature/xxx
+```
+
+### 注意点・トラブルシューティング
+
+**worktree 残骸の掃除**
+
+エージェントが異常終了した場合、worktree のディレクトリが残ることがある:
+
+```bash
+# 参照が切れた worktree を掃除
+git worktree prune
+
+# 全 worktree を確認
+git worktree list
+```
+
+**コンフリクト発生時の対処**
+
+複数のエージェントが同じファイルを変更した場合はマージコンフリクトが起きる。エージェントごとに担当ディレクトリを明示して指示することで防げる:
+
+```
+> エージェントAは src/auth/ のみ、エージェントBは src/api/ のみを変更してください。
+```
+
+**node_modules の重複に注意**
+
+worktree ごとに `node_modules` が必要になるため、ディスク容量を多く使う。ライブラリのインストールが重い場合は `--no-checkout` で必要なファイルだけを取得する方法もある:
+
+```bash
+git worktree add --no-checkout ../feature-worktree -b feature/xxx
+```
+
+---
+
 ## プラグイン — まとめてインポートする
 
 スキル・エージェント・設定をまとめたパッケージ。他の人が作ったセットをそのまま取り込める。`~/.claude/plugins/` に置いて有効化する。
