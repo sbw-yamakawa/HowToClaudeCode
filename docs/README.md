@@ -12,6 +12,7 @@
 もっと使いこなしたい人:
 - [02-intermediate.md](./02-intermediate.md) — プロンプトの書き方・設定
 - [03-advanced.md](./03-advanced.md) — MCP・エージェント・フック
+- [06-extensions.md](./06-extensions.md) — 拡張機能の探し方・追加方法（MCP・スキル・エージェント・プラグイン）
 
 設定をまるごとインポートしたい人:
 - [05-dotfiles.md](./05-dotfiles.md) — dotfiles でカスタマイズ
