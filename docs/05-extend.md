@@ -413,11 +413,11 @@ Claude がワークツリーの作成・割り当て・後片付けまで行っ�
 独立したタスクを複数のエージェントで同時に進める:
 
 ```
-> 以下を worktree を使って並列で実行してください:
-> 1. src/auth/ のユニットテストを追加する
-> 2. src/api/ の JSDoc コメントを補完する
-> 3. 未使用の import を全ファイルから削除する
-> 各タスクは独立した worktree で行ってください。
+> 以下の作業をそれぞれ独立した worktree で並列実行してください。
+> 各エージェントはメインブランチに影響を与えず、完了後にレビューしてからマージします:
+> 1. 認証モジュールをリファクタリングする（src/auth/ 全体）
+> 2. 決済APIをv2からv3に移行する（src/payment/ 全体）
+> 3. データベーススキーマの変更に対応する（src/db/ 全体）
 ```
 
 **破壊的変更の試験的実施**
@@ -439,13 +439,13 @@ Claude がワークツリーの作成・割り当て・後片付けまで行っ�
 
 ```
 1. worktree 作成
-   git worktree add ../feature-worktree -b feature/xxx
+   git worktree add -b feature/xxx ../feature-worktree
          ↓
 2. エージェントが worktree 内で作業
    （ファイル変更・コミット）
          ↓
-3a. 成功 → メインブランチにマージ
-    git merge feature/xxx
+3a. 成功 → メインの作業ツリーに戻りマージ
+    git merge feature/xxx           # master ブランチで実行
     git worktree remove ../feature-worktree
          ↓
 3b. 失敗 → worktree ごと破棄
@@ -477,10 +477,13 @@ git worktree list
 
 **node_modules の重複に注意**
 
-worktree ごとに `node_modules` が必要になるため、ディスク容量を多く使う。ライブラリのインストールが重い場合は `--no-checkout` で必要なファイルだけを取得する方法もある:
+worktree ごとに `node_modules` が必要になるため、ディスク容量を多く使う。`--no-checkout` はファイルを一切展開しないオプションで、後から必要なファイルだけチェックアウトできる:
 
 ```bash
-git worktree add --no-checkout ../feature-worktree -b feature/xxx
+# ファイルを展開せずに worktree だけ作成
+git worktree add --no-checkout -b feature/xxx ../feature-worktree
+cd ../feature-worktree
+git checkout HEAD -- .  # 必要なファイルを展開
 ```
 
 ---
