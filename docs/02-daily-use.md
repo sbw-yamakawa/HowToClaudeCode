@@ -365,6 +365,7 @@ git worktree prune
 feature ブランチで作業中に緊急バグの対応が必要になったとき:
 
 ```bash
+# my-project/ ディレクトリで実行
 # main から hotfix ブランチを作成して別フォルダでチェックアウト
 git worktree add ../my-project-hotfix -b hotfix/login-bug main
 cd ../my-project-hotfix
@@ -402,9 +403,9 @@ git worktree add ../my-project-main main
 
 worktree は同じ Git オブジェクトを共有している。両方の worktree で同じファイルを変更すると、コンフリクトが発生しやすい。編集するファイルをディレクトリ単位で分けて作業する。
 
-**node_modules / .env は共有されない**
+**node_modules / .env は自動では引き継がれない**
 
-worktree 内では `npm install` を再実行する必要がある。`.env` もメインからコピーが必要。
+worktree は独立したディレクトリで動作するため、`npm install` を再実行する必要がある。`.env` もメインディレクトリからコピーして配置する。
 
 **同じブランチを2つの worktree でチェックアウトできない**
 
@@ -413,14 +414,14 @@ worktree 内では `npm install` を再実行する必要がある。`.env` も�
 ### クリーンアップ
 
 ```bash
+# 現在の worktree を確認してから削除する
+git worktree list
+
 # worktree のディレクトリを削除してから登録も解除
 git worktree remove ../my-project-hotfix
 
 # ディレクトリが手動削除済みの場合は prune で参照を掃除
 git worktree prune
-
-# 全 worktree の確認
-git worktree list
 ```
 
 ---
