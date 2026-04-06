@@ -18,9 +18,6 @@ docs/
   03-better-prompts.md     # 「より正確に動かしたい」— プロンプト術・トラブルシューティング
   04-customize.md          # 「自分仕様に設定したい」— CLAUDE.md・rules・設定・フック・dotfiles
   05-extend.md             # 「できることを増やしたい」— MCP・スキル・エージェント・プラグイン
-  superpowers/
-    specs/                 # 設計ドキュメント
-    plans/                 # 実装計画
 ```
 
 ## 設計方針
@@ -55,4 +52,4 @@ settings.json の mcpServers セクションに以下のJSONを追加してく�
 - コードブロックはコピペで動く形にする
 - 各ドキュメントの末尾に「次のステップ」リンクを維持する
 - セクション区切りは `---` で統一する
-- `docs/superpowers/` 配下のファイルは計画・仕様ドキュメント（`.gitignore`対象だが参照・編集可能）
+- `.superpowers/` 配下のファイルは計画・仕様ドキュメント（`.gitignore`対象だが参照・編集可能）
