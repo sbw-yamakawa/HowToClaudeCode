@@ -379,6 +379,8 @@ git worktree remove ../my-project-hotfix
 レビュー対象ブランチをビルドして動作確認したいとき:
 
 ```bash
+# リモートブランチの場合は先に fetch する
+git fetch origin feature/other-team-pr
 # レビュー用に別ディレクトリでチェックアウト
 git worktree add ../my-project-review feature/other-team-pr
 cd ../my-project-review

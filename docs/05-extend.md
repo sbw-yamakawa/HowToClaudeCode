@@ -445,8 +445,10 @@ Claude がワークツリーの作成・割り当て・後片付けまで行っ�
    （ファイル変更・コミット）
          ↓
 3a. 成功 → メインの作業ツリーに戻りマージ
-    git merge feature/xxx           # master ブランチで実行
+    cd ../my-project                 # メインの作業ツリーに移動
+    git merge feature/xxx            # master ブランチで実行
     git worktree remove ../feature-worktree
+    git branch -D feature/xxx        # マージ後のブランチを削除
          ↓
 3b. 失敗 → worktree ごと破棄
     git worktree remove --force ../feature-worktree
@@ -477,13 +479,13 @@ git worktree list
 
 **node_modules の重複に注意**
 
-worktree ごとに `node_modules` が必要になるため、ディスク容量を多く使う。`--no-checkout` はファイルを一切展開しないオプションで、後から必要なファイルだけチェックアウトできる:
+worktree ごとに `node_modules` が必要になるため、ディスク容量を多く使う。`--no-checkout` はファイルを一切展開しないオプション。後から `git checkout` で全ファイルを展開できる:
 
 ```bash
 # ファイルを展開せずに worktree だけ作成
 git worktree add --no-checkout -b feature/xxx ../feature-worktree
 cd ../feature-worktree
-git checkout HEAD -- .  # 必要なファイルを展開
+git checkout HEAD -- .  # 全ファイルを展開
 ```
 
 ---
